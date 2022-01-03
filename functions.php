@@ -1,14 +1,19 @@
 <?php
 /*
- *  Parameters:
- *           string - $email
+ * Parameters:
+ *          string - $email
  *
- *   Description: поиск пользователя по электронному адресу
+ * Description: поиск пользователя по электронному адресу
  *
- *   Return value: array
+ * Return value: array
  *
  */
-function get_user_by_email($email) {}
+function get_user_by_email($email) {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("SELECT * FROM users WHERE email=:email");
+    $statement->execute([':email' => $email]);
+    return $statement->fetch(PDO::FETCH_ASSOC);
+}
 
 /*
  * Parameters:
@@ -20,7 +25,12 @@ function get_user_by_email($email) {}
  * Return value: int (user_id)
  *
  */
-function add_user($email, $password){}
+function add_user($email, $password){
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+    $statement->execute([':email' => $email, ':password' => $password]);
+    return $pdo->lastInsertId();
+}
 
  /*
   * Parameters:
@@ -32,7 +42,9 @@ function add_user($email, $password){}
   * Return value: null
   *
   * */
-function set_flash_message($name, $message){}
+function set_flash_message($name, $message){
+    $_SESSION[$name] = $message;
+}
 
 /*
  * Parameters:
@@ -43,7 +55,10 @@ function set_flash_message($name, $message){}
  * Return value: null
  *
  * */
-function display_flash_message($name){}
+function display_flash_message($name){
+    echo $_SESSION[$name];
+    unset($_SESSION[$name]);
+}
 
 /*
  * Parameters:
@@ -54,4 +69,6 @@ function display_flash_message($name){}
  * Return value: null
  *
  * */
-function redirect_to($path){}
+function redirect_to($path){
+    header("Location: " . $path);
+}

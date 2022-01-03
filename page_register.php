@@ -1,3 +1,8 @@
+<?php
+session_start();
+include 'functions.php';
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,19 +64,21 @@
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
+                                    <?php if(isset($_SESSION['msg'])): ?>
                                     <div class="alert alert-danger text-dark" role="alert">
-                                        <strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.
+                                        <strong>Уведомление!</strong> <?php display_flash_message('msg'); ?>
                                     </div>
-                                    <form id="js-login" novalidate="" action="">
+                                    <?php endif; ?>
+                                    <form id="js-login" novalidate="" action="register.php" method="post">
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>
-                                            <input type="email" id="emailverify" class="form-control" placeholder="Эл. адрес" required>
+                                            <input type="email" id="emailverify" class="form-control" placeholder="Эл. адрес" name="email" required>
                                             <div class="invalid-feedback">Заполните поле.</div>
                                             <div class="help-block">Эл. адрес будет вашим логином при авторизации</div>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label" for="userpassword">Пароль <br></label>
-                                            <input type="password" id="userpassword" class="form-control" placeholder="" required>
+                                            <input type="password" id="userpassword" class="form-control" placeholder="" name="password" required>
                                             <div class="invalid-feedback">Заполните поле.</div>
                                         </div>
                                        
@@ -92,11 +99,11 @@
     
     <script src="js/vendors.bundle.js"></script>
     <script>
-        $("#js-login-btn").click(function(event)
+        $("#js-login-btn").onclick(function(event)
         {
 
             // Fetch form to apply custom Bootstrap validation
-            var form = $("#js-login")
+            let form = $("#js-login")
 
             if (form[0].checkValidity() === false)
             {
