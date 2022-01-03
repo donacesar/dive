@@ -43,7 +43,7 @@ include 'functions.php';
                         <span class="text-white opacity-50 ml-auto mr-2 hidden-sm-down">
                             Уже зарегистрированы?
                         </span>
-                        <a href="page_login.html" class="btn-link text-white ml-auto ml-sm-0">
+                        <a href="page_login.php" class="btn-link text-white ml-auto ml-sm-0">
                             Войти
                         </a>
                     </div>
@@ -64,9 +64,9 @@ include 'functions.php';
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
-                                    <?php if(isset($_SESSION['msg'])): ?>
+                                    <?php if(isset($_SESSION['danger'])): ?>
                                     <div class="alert alert-danger text-dark" role="alert">
-                                        <strong>Уведомление!</strong> <?php display_flash_message('msg'); ?>
+                                        <strong>Уведомление!</strong> <?php display_flash_message('danger'); ?>
                                     </div>
                                     <?php endif; ?>
                                     <form id="js-login" novalidate="" action="register.php" method="post">
