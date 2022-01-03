@@ -72,3 +72,27 @@ function display_flash_message($name){
 function redirect_to($path){
     header("Location: " . $path);
 }
+
+/*
+ * Parameters:
+ *          string - $email
+ *          string - $password
+ *
+ * Description: авторизировать пользователя
+ *
+ * Return value: boolean
+ *
+ * */
+function login($email, $password)
+{
+    $user = get_user_by_email($email);
+    if (!$user) {
+        return false;
+    }
+    if(password_verify($password, $user['password'])) {
+        $_SESSION['user'] = $user;
+        return true;
+    }
+    return false;
+}
+
