@@ -6,7 +6,7 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 
 if (login($email, $password)) {
-    redirect_to('user.php');
+    redirect_to('users.php');
     exit;
 }
 
