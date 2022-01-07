@@ -8,7 +8,7 @@
  * Return value: array
  *
  */
-function get_user_by_email($email) {
+function get_user_by_email($email): array {
     $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
     $statement = $pdo->prepare("SELECT * FROM users WHERE email=:email");
     $statement->execute([':email' => $email]);
@@ -25,24 +25,25 @@ function get_user_by_email($email) {
  * Return value: int (user_id)
  *
  */
-function add_user($email, $password){
+function add_user($email, $password): int
+{
     $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
     $statement = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
     $statement->execute([':email' => $email, ':password' => $password]);
     return $pdo->lastInsertId();
 }
 
- /*
-  * Parameters:
-  *         string - $name (ключ)
-  *         string - $message (Значение, текст сообщения)
-  *
-  * Description: Подготовить текст сообщения
-  *
-  * Return value: null
-  *
-  * */
-function set_flash_message($name, $message){
+/*
+ * Parameters:
+ *         string - $name (ключ)
+ *         string - $message (Значение, текст сообщения)
+ *
+ * Description: Подготовить текст сообщения
+ *
+ * Return value: null
+ *
+ * */
+function set_flash_message($name, $message): void {
     $_SESSION[$name] = $message;
 }
 
@@ -55,7 +56,7 @@ function set_flash_message($name, $message){
  * Return value: null
  *
  * */
-function display_flash_message($name){
+function display_flash_message($name): void {
     echo $_SESSION[$name];
     unset($_SESSION[$name]);
 }
@@ -66,10 +67,10 @@ function display_flash_message($name){
  *
  * Description: перенаправляет на другую страницу
  *
- * Return value: null
+ * Return value: void
  *
  * */
-function redirect_to($path){
+function redirect_to($path): void {
     header("Location: " . $path);
 }
 
@@ -83,7 +84,7 @@ function redirect_to($path){
  * Return value: boolean
  *
  * */
-function login($email, $password)
+function login($email, $password): bool
 {
     $user = get_user_by_email($email);
     if (!$user) {
@@ -96,3 +97,51 @@ function login($email, $password)
     return false;
 }
 
+/*
+ * Parameters:
+ *          none
+ *
+ * Description: Проверить что пользователь не залогинен
+ *
+ * Return value: boolean
+ *
+ * */
+function is_not_logged_in(): bool
+{
+    if(isset($_SESSION['user'])) {
+        return false;
+    }
+    return true;
+}
+
+/*
+ * Parameters:
+ *          int - $id
+ *
+ * Description: Достать информацию о пользователе
+ *
+ * Return value: array
+ *
+ * */
+function get_info_by_id($id): array {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("SELECT * FROM users_info WHERE user_id=:id");
+    $statement->execute([':id' => $id]);
+    return $statement->fetch(PDO::FETCH_ASSOC);
+}
+
+/*
+ * Parameters:
+ *          none
+ *
+ * Description: Получить всех пользователей
+ *
+ * Return value: array
+ *
+ * */
+function get_all_users(): array {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("SELECT * FROM users");
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
