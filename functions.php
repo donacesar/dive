@@ -229,3 +229,59 @@ function add_social_links($id, $vk, $telegram, $instagram): void {
     $statement = $pdo->prepare("UPDATE users_info SET vk=:vk, telegram=:telegram, instagram=:instagram WHERE user_id=:user_id");
     $statement->execute([':vk' => $vk, ':telegram' => $telegram, ':instagram' => $instagram, ':user_id' => $id]);
 }
+
+/*
+ * Parameters:
+ *              $logged_user_id int
+ *              $edit_user_id int
+ *
+ * Description: проверить автор ли текущий авторизированный пользователь
+ *
+ * Return value: boolean
+ *
+ * */
+function is_author($logged_user_id, $edit_user_id): bool {
+    if($logged_user_id === $edit_user_id) {
+        return true;
+    }
+    return false;
+}
+
+/*
+ * Parameters:
+ *          $user_id int
+ *
+ * Description: получить пользователя по id
+ *
+ * Return value: array | boolean(false)
+ *
+ * */
+function get_user_by_id($id): mixed {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("SELECT * FROM users_info WHERE user_id=:user_id");
+    $response = $statement->execute([':user_id' => $id]);
+    if ($response === false) {
+        return false;
+    }
+    return $statement->fetch(PDO::FETCH_ASSOC);
+}
+
+/*
+ * Parameters:
+ *          $user_id int
+ *          $name string
+ *          $workplace string
+ *          $phone string
+ *          $address string
+ *
+ * Description: редактировать общую информацию
+ *
+ * Return value: void
+ *
+ * */
+function edit_info($user_id, $name, $workplace, $phone, $address): void {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charser=utf8", 'root', 'root');
+    $statement = $pdo->prepare("UPDATE users_info SET name=:name, workplace=:workplace, phone=:phone, address=:address WHERE user_id=:user_id");
+    $statement->execute([':name' => $name, ':workplace' => $workplace, ':phone' => $phone, ':address' => $address, ':user_id' => $user_id]);
+
+}

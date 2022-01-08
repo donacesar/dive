@@ -1,3 +1,8 @@
+<?php
+session_start();
+include 'functions.php';
+
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +38,11 @@
             </div>
         </nav>
         <main id="js-page-content" role="main" class="page-content mt-3">
+            <?php if(isset($_SESSION['success'])): ?>
+                <div class="alert alert-success">
+                    <?php display_flash_message('success'); ?>
+                </div>
+            <?php endif; ?>
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-user'></i> Иван Иванов

@@ -1,3 +1,28 @@
+<?php
+session_start();
+include 'functions.php';
+
+$id = $_GET['id'];
+
+if (is_not_logged_in()) {
+    redirect_to('page_login.php');
+    exit;
+}
+
+if (!($_SESSION['user']['role'] == 'admin')) {
+    if (!is_author($_SESSION['user']['id'], $id)) {
+        set_flash_message('danger', 'Можно редактировать только свой профиль');
+        redirect_to('users.php');
+        exit;
+    }
+}
+
+$info = get_info_by_id($id);
+
+
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +51,7 @@
                     <a class="nav-link" href="page_login.php">Войти</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="logoff.php">Выйти</a>
                 </li>
             </ul>
         </div>
@@ -38,7 +63,7 @@
             </h1>
 
         </div>
-        <form action="">
+        <form action="edit.php" method="post">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -50,28 +75,29 @@
                                 <!-- username -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Иван иванов">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$info['name']; ?>" name="name">
                                 </div>
 
                                 <!-- title -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Marlin Веб-разработчик">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$info['workplace']; ?>" name="workplace">
                                 </div>
 
                                 <!-- tel -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="8 888 8888 88">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$info['phone']; ?>" name="phone">
                                 </div>
 
                                 <!-- address -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Восточные Королевства, Штормград">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$info['address']; ?>" name="address">
                                 </div>
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Редактировать</button>
+                                    <input type="hidden" name="id" value="<?=$id; ?>">
+                                    <button class="btn btn-warning" type="submit">Редактировать</button>
                                 </div>
                             </div>
                         </div>
