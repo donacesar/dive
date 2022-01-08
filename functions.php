@@ -1,24 +1,27 @@
 <?php
 /*
  * Parameters:
- *          string - $email
+ *          $email string
  *
  * Description: поиск пользователя по электронному адресу
  *
- * Return value: array
+ * Return value: array | bool (false)
  *
  */
-function get_user_by_email($email): array {
+function get_user_by_email($email): mixed {
     $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
     $statement = $pdo->prepare("SELECT * FROM users WHERE email=:email");
-    $statement->execute([':email' => $email]);
+    $response = $statement->execute([':email' => $email]);
+    if ($response === false) {
+        return false;
+    }
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
 /*
  * Parameters:
- *          string - $email
- *          string - $password
+ *          $email string
+ *          $password string
  *
  * Description: Добавить пользователя в БД
  *
@@ -35,8 +38,8 @@ function add_user($email, $password): int
 
 /*
  * Parameters:
- *         string - $name (ключ)
- *         string - $message (Значение, текст сообщения)
+ *         $name (ключ) string
+ *         $message (Значение, текст сообщения) string
  *
  * Description: Подготовить текст сообщения
  *
@@ -49,7 +52,7 @@ function set_flash_message($name, $message): void {
 
 /*
  * Parameters:
- *          string - $name (ключ)
+ *          $name (ключ) string
  *
  * Description: вывести флеш сообщение
  *
@@ -63,7 +66,7 @@ function display_flash_message($name): void {
 
 /*
  * Parameters:
- *          string - $path
+ *          $path string
  *
  * Description: перенаправляет на другую страницу
  *
@@ -76,8 +79,8 @@ function redirect_to($path): void {
 
 /*
  * Parameters:
- *          string - $email
- *          string - $password
+ *          $email string
+ *          $password string
  *
  * Description: авторизировать пользователя
  *
@@ -116,7 +119,7 @@ function is_not_logged_in(): bool
 
 /*
  * Parameters:
- *          int - $id
+ *          $id int
  *
  * Description: Достать информацию о пользователе
  *
@@ -144,4 +147,85 @@ function get_all_users(): array {
     $statement = $pdo->prepare("SELECT * FROM users");
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/*
+ * Parameters:
+ *          $id int
+ *          $name string
+ *          $workplace string
+ *          $phone string
+ *          $address string
+ *
+ * Description: редактировать пользователя
+ *
+ * Return value: void
+ **/
+function add_info($name, $workplace, $phone, $id, $address): void {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("INSERT INTO users_info (name, workplace, phone, user_id, address) VALUES (:name, :workplace, :phone, :user_id, :address) ");
+    $statement->execute([':name' => $name, ':workplace' => $workplace, ':phone' => $phone, ':user_id' => $id, ':address' => $address]);
+}
+
+/*
+ * Parameters:
+ *          $id int
+ *          $status string
+ *
+ * Description: установить статус
+ *
+ * Return value: void
+ *
+ **/
+function set_status($id, $status): void {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("UPDATE users_info SET status=:status WHERE user_id = :user_id");
+    $statement->execute([':status' => $status, ':user_id' => $id]);
+}
+
+/*
+ * Parameters:
+ *          $filename string
+ *
+ * Description: Генерирует уникальное имя для файла
+ *
+ * Return value: string*/
+function filename_generate($filename): string {
+    $extension = pathinfo($filename)['extension'];
+    return uniqid() . "." . $extension;
+}
+
+/*
+ * Parameters:
+ *          $id int
+ *          $image array
+ * Description: загрузить аватар
+ *
+ * Return value: void
+ *
+ * */
+function upload_avatar($id, $image): void {
+    $filename = filename_generate($image['name']);
+    $filename = 'img/demo/avatars/' . $filename;
+    move_uploaded_file($image['tmp_name'], $filename);
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("UPDATE users_info SET avatar=:avatar WHERE user_id=:user_id");
+    $statement->execute([':avatar' => $filename, ':user_id' => $id]);
+}
+
+/*
+ * Parameters:
+ *          $id int
+ *          $vk string
+ *          $telegram string
+ *          $instagram string
+ * Description: добавить ссылки на соцсети
+ *
+ * Return value: void
+ *
+ * */
+function add_social_links($id, $vk, $telegram, $instagram): void {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("UPDATE users_info SET vk=:vk, telegram=:telegram, instagram=:instagram WHERE user_id=:user_id");
+    $statement->execute([':vk' => $vk, ':telegram' => $telegram, ':instagram' => $instagram, ':user_id' => $id]);
 }

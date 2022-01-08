@@ -47,9 +47,9 @@ $users = get_all_users();
         </nav>
 
         <main id="js-page-content" role="main" class="page-content mt-3">
-            <?php if(isset($_SESSION['msg'])): ?>
+            <?php if(isset($_SESSION['success'])): ?>
                 <div class="alert alert-success">
-                    <?php display_flash_message('msg'); ?>
+                    <?php display_flash_message('success'); ?>
                 </div>
             <?php endif; ?>
             <div class="subheader">
@@ -60,7 +60,7 @@ $users = get_all_users();
             <div class="row">
                 <div class="col-xl-12">
                     <?php if($current_user['role'] == 'admin'): ?>
-                        <a class="btn btn-success" href="create_user.html">Добавить</a>
+                        <a class="btn btn-success" href="page_create_user.php">Добавить</a>
                     <?php endif; ?>
                     <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                         <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
