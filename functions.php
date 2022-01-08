@@ -123,13 +123,16 @@ function is_not_logged_in(): bool
  *
  * Description: Достать информацию о пользователе
  *
- * Return value: array
+ * Return value: array | boolean (false)
  *
  * */
-function get_info_by_id($id): array {
+function get_info_by_id($id): mixed {
     $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
     $statement = $pdo->prepare("SELECT * FROM users_info WHERE user_id=:id");
-    $statement->execute([':id' => $id]);
+    $response = $statement->execute([':id' => $id]);
+    if ($response === false) {
+        return false;
+    }
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -258,8 +261,8 @@ function is_author($logged_user_id, $edit_user_id): bool {
  * */
 function get_user_by_id($id): mixed {
     $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
-    $statement = $pdo->prepare("SELECT * FROM users_info WHERE user_id=:user_id");
-    $response = $statement->execute([':user_id' => $id]);
+    $statement = $pdo->prepare("SELECT * FROM users WHERE id=:id");
+    $response = $statement->execute([':id' => $id]);
     if ($response === false) {
         return false;
     }

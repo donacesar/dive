@@ -10,4 +10,4 @@ $id = $_POST['id'];
 
 edit_info($id, $name, $workplace, $phone, $address);
 set_flash_message('success', 'Пользователь успешно обновлен');
-redirect_to('page_profile.php');
+redirect_to('page_profile.php?id=' . $id);
