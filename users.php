@@ -88,9 +88,9 @@ $users = get_all_users();
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                             <div class="d-flex flex-row align-items-center">
                                 <?php $status = 'info'; ?>
-                                <?php if($info['status'] == 'Онлайн') $status = 'success'; ?>
-                                <?php if($info['status'] == 'Отошел') $status = 'warning';  ?>
-                                <?php if($info['status'] == 'Не беспокоить') $status = 'danger'; ?>
+                                <?php if($info['status'] == 'online') $status = 'success'; ?>
+                                <?php if($info['status'] == 'away') $status = 'warning';  ?>
+                                <?php if($info['status'] == 'busy') $status = 'danger'; ?>
                                 <span class="status status-<?=$status; ?> mr-3">
                                     <span class="rounded-circle profile-image d-block " style="background-image:url('<?=$info['avatar']; ?>'); background-size: cover;"></span>
                                 </span>
@@ -110,7 +110,7 @@ $users = get_all_users();
                                         <a class="dropdown-item" href="page_security.php?id=<?=$user['id']; ?>">
                                             <i class="fa fa-lock"></i>
                                         Безопасность</a>
-                                        <a class="dropdown-item" href="status.php?id=<?=$user['id']; ?>">
+                                        <a class="dropdown-item" href="page_status.php?id=<?=$user['id']; ?>">
                                             <i class="fa fa-sun"></i>
                                         Установить статус</a>
                                         <a class="dropdown-item" href="media.php?id=<?=$user['id']; ?>">

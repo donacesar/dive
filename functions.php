@@ -310,3 +310,4 @@ function edit_credentials($id, $email, $password) {
     $statement = $pdo->prepare("UPDATE users SET email=:email, password=:password WHERE id=:id");
     $statement->execute([':email' => $email, ':password' => $password, ':id' => $id]);
 }
+
