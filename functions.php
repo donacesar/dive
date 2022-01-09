@@ -311,3 +311,4 @@ function edit_credentials($id, $email, $password) {
     $statement->execute([':email' => $email, ':password' => $password, ':id' => $id]);
 }
 
+
