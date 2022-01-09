@@ -107,7 +107,7 @@ $users = get_all_users();
                                         <a class="dropdown-item" href="page_edit.php?id=<?=$user['id']; ?>">
                                             <i class="fa fa-edit"></i>
                                         Редактировать</a>
-                                        <a class="dropdown-item" href="security.php?id=<?=$user['id']; ?>">
+                                        <a class="dropdown-item" href="page_security.php?id=<?=$user['id']; ?>">
                                             <i class="fa fa-lock"></i>
                                         Безопасность</a>
                                         <a class="dropdown-item" href="status.php?id=<?=$user['id']; ?>">

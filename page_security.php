@@ -1,3 +1,26 @@
+<?php
+session_start();
+include 'functions.php';
+
+$id = $_GET['id'];
+
+if (is_not_logged_in()) {
+    redirect_to('page_login.php');
+    exit;
+}
+
+if (!($_SESSION['user']['role'] == 'admin')) {
+    if (!is_author($_SESSION['user']['id'], $id)) {
+        set_flash_message('danger', 'Можно редактировать только свой профиль');
+        redirect_to('users.php');
+        exit;
+    }
+}
+
+$user = get_user_by_id($id);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,13 +55,18 @@
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+        <?php if(isset($_SESSION['danger'])): ?>
+            <div class="alert alert-danger">
+                <?php display_flash_message('danger'); ?>
+            </div>
+        <?php endif; ?>
         <div class="subheader">
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-lock'></i> Безопасность
             </h1>
 
         </div>
-        <form action="">
+        <form action="security.php" method="post">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -49,25 +77,26 @@
                             <div class="panel-content">
                                 <!-- email -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="john@example.com">
+                                    <label class="form-label" for="simpleinput1">Email</label>
+                                    <input type="text" id="simpleinput1" class="form-control" name="email" value="<?=$user['email']; ?>">
                                 </div>
 
                                 <!-- password -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="simpleinput2">Пароль</label>
+                                    <input type="password" id="simpleinput2" class="form-control" name="password">
+                                    <input type="hidden" name="id" value="<?=$id; ?>">
                                 </div>
 
                                 <!-- password confirmation-->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Подтверждение пароля</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="simpleinput3">Подтверждение пароля</label>
+                                    <input type="password" id="simpleinput3" class="form-control">
                                 </div>
 
 
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Изменить</button>
+                                    <button class="btn btn-warning" type="submit">Изменить</button>
                                 </div>
                             </div>
                         </div>

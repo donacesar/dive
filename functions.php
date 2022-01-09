@@ -288,3 +288,25 @@ function edit_info($user_id, $name, $workplace, $phone, $address): void {
     $statement->execute([':name' => $name, ':workplace' => $workplace, ':phone' => $phone, ':address' => $address, ':user_id' => $user_id]);
 
 }
+
+/*
+ * Parameters:
+ *          $user_id int
+ *          $email string
+ *          $password string
+ *
+ * Description: редактировать входные данные email или password
+ *
+ *  Return value: void
+ *
+ * */
+function edit_credentials($id, $email, $password) {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    if ($password === '') {
+        $statement = $pdo->prepare("UPDATE users SET email=:email WHERE id=:id");
+        $statement->execute([':email' => $email, ':id' => $id]);
+        return;
+    }
+    $statement = $pdo->prepare("UPDATE users SET email=:email, password=:password WHERE id=:id");
+    $statement->execute([':email' => $email, ':password' => $password, ':id' => $id]);
+}
