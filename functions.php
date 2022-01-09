@@ -311,4 +311,24 @@ function edit_credentials($id, $email, $password) {
     $statement->execute([':email' => $email, ':password' => $password, ':id' => $id]);
 }
 
+/*
+ * Parameters:
+ *          $id int
+ *
+ * Description: удалить пользователя
+ *
+ * Return value: void
+ *
+ * */
+function delete_user($id): void {
+    $pdo = new PDO("mysql:host=localhost;dbname=my_database;charset=utf8", 'root', 'root');
+    $statement = $pdo->prepare("DELETE FROM users WHERE id=:id");
+    $statement->execute([':id' => $id]);
+    $info = get_info_by_id($id);
+    if ($info['avatar']!== '') {
+        unlink($info['avatar']);
+    }
+    $statement = $pdo->prepare("DELETE FROM users_info WHERE user_id=:user_id");
+    $statement->execute([':user_id' => $id]);
+}
 
