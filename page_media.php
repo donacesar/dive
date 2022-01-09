@@ -64,7 +64,7 @@ if ($avatar === '') {
             </h1>
 
         </div>
-        <form action="madia.php" method="post" enctype="multipart/form-data">
+        <form action="media.php" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
